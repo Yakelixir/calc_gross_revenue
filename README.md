@@ -17,11 +17,7 @@ python3 --version
 I have decided not to integrate asycnio or concurrent futures.
 This in the esesense of time and not knowing the demands of the application or its resources
 
-### Usage
 
-```sh
-python yield_gross_rev.py <Product_File_Path> <Sales_File_Path> <Report_File_Name>
-```
 Notes:
 1. The following args are in a specific order that is not flexible
 2. The file name will be used to create a file in the directory /files
@@ -32,3 +28,11 @@ Notes:
     mkdir files
     ```
 3. There are no installs needed or requirements as everything should come with a base python3 install
+4. When using real file, we may have different permissions depending on the computer and operating system
+5. 
+
+### Usage
+
+```sh
+python yield_gross_rev.py <Product_File_Path> <Sales_File_Path> <Report_File_Name>
+```
