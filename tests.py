@@ -5,9 +5,14 @@
 """
 TESTING FOR BIGRAM FROM FILE PARSING
 : DOCS : https://docs.python.org/3/library/unittest.html
+
+I will set up basic testing here.
+In the essence of time I won't go into exception handling testing
+
 """
 
 import os
+import io
 import re
 import sys
 import logging
@@ -62,12 +67,12 @@ class TestbigramParse(unittest.TestCase):
         """
         self.assertEqual('', '')
 
-    def test_sum_bigrams(self):
-        """
-        test that the total count of bigrams found equals the total count of frequencies
-        this should fail as we know there are LTR marks \u200e
-        """
-        self.assertEqual('', '')
+    # def test_sum_bigrams(self):
+    #     """
+    #     test that the total count of bigrams found equals the total count of frequencies
+    #     this should fail as we know there are LTR marks \u200e
+    #     """
+    #     self.assertEqual('', '')
 
     # def approach_delta(self):
     #     """
@@ -77,6 +82,22 @@ class TestbigramParse(unittest.TestCase):
     #
     #     # OR
     #     # assertDictEqual(expected, actual, msg=None)
+
+    def test_reading_of_data_from_file(self):
+        """
+
+        :return:
+        """
+        testStream = io.StringIO()
+        testStream.write('')
+        testStream.seek(0)
+        assert('T.M.', readInitialsFromFileStream(testStream))
+
+    def test_writing_of_data_to_file(self):
+        """
+
+        :return:
+        """
 
 if __name__ == '__main__':
     unittest.main()
