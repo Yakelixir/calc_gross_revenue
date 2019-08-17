@@ -21,7 +21,7 @@ import logging
 from decimal import Decimal
 
 
-def read_file(file_path):
+def read_file_lines(file_path):
     """
     Load a file
     Loop through process_lines generator
@@ -96,12 +96,14 @@ def process_files(products, sales):
     :return:
     """
 
-    p_line = read_file(products)
-    s_line = read_file(sales)
-    for prod_line, sale_line in zip(p_line, s_line):
-        units = calc_total_units(sale_line[3], prod_line[3])
-        out_line = f'{prod_line[1]},{calc_gross_revenue(prod_line[2], units)},{units}'
-        yield out_line
+    p_list = list(read_file_lines(products))
+    s_line = read_file_lines(sales)
+    for sale_data in s_line:
+        for prod_data in p_list:
+            if sale_data[1] == prod_data[0]:
+                units = calc_total_units(sale_data[3], prod_data[3])
+                out_line = f'{prod_data[1]},{calc_gross_revenue(prod_data[2], units)},{units}'
+                yield out_line
 
 
 def calc_total_units(quantity, lot_size):
@@ -140,7 +142,9 @@ def open_file(directory, name):
     :return:
     File Object
     """
-    return open(f'{directory}/files/{name}', "w+")
+    return open(f'{directory}/{name}', "w+")
+
+
 
 
 if __name__ == '__main__':
@@ -155,26 +159,26 @@ if __name__ == '__main__':
     LOGGER.addHandler(LOG_HANDLER)
     LOGGER.info('Completed configuring logger()!')
 
-    CURRENT_DIR = os.getcwd()
-    FILE_HEADER = 'Name,GrossRevenue,TotalUnits\n'
-
     if len(sys.argv) == 4:
         P_FILE, S_FILE, OUT_FILE = sys.argv[1], sys.argv[2], sys.argv[3]
     else:
         sys.exit('There was an error in the length of your arguments')
+
+    CURRENT_DIR = os.getcwd()
+    FILE_HEADER = 'Name,GrossRevenue,TotalUnits\n'
+
     try:
-        OUT_LINE = process_files(P_FILE, S_FILE)
-        REPORT_FILE = open_file(CURRENT_DIR, OUT_FILE)
-        REPORT_FILE.write(FILE_HEADER)
+        OUT_LINE = process_files(P_FILE, S_FILE)  # MATCHED & PROCESSED PRODUCT LINE
+        REPORT_FILE = open_file(CURRENT_DIR, OUT_FILE)  # CREATE REPORT FILE
+        REPORT_FILE.write(FILE_HEADER)  # APPLY FILE HEADER
         for line in OUT_LINE:
             if line:
-                print(line)
                 REPORT_FILE.write(line + '\n')
                 LOGGER.warning(f'WRITING:{line}>>{REPORT_FILE}')
             else:
                 REPORT_FILE.close()
                 break
     except Exception as error:
-        print(f'MAIN ERROR : {error}')
+        print(f'TOP-LEVEL ERROR : {error}')
         LOGGER.exception(error)
         sys.exit(f'{error} : Plese see the logs')

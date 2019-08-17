@@ -15,18 +15,13 @@ python3 --version
 ```
 
 I have decided not to integrate asycnio or concurrent futures.
-This in the esesense of time and not knowing the demands of the application or its resources
+This in the essence of time and not knowing the demands of the application or its resources
 
 
 Notes:
-1. The following args are in a specific order that is not flexible
-2. The file name will be used to create a file in the directory /files
-    If the directory '/files' is not present in your current working directory run the following prior to execution
-    ```sh
-    mkdir files
-    ```
-3. There are no installs needed or requirements as everything should come with a base python3 install
-4. When using real files, we may have different permissions depending on the computer and operating system
+1. The following args are in a specific order that is not flexible currently
+2. There are no installs needed or requirements as everything should come with a base python3 install
+3. When using real files, we may have different permissions depending on the computer and operating system
 
 ### Usage
 
