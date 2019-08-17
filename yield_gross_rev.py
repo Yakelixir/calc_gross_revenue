@@ -102,7 +102,8 @@ def process_files(products, sales):
         for prod_data in p_list:
             if sale_data[1] == prod_data[0]:
                 units = calc_total_units(sale_data[3], prod_data[3])
-                out_line = f'{prod_data[1]},{calc_gross_revenue(prod_data[2], units)},{units}'
+                out_line = [calc_gross_revenue(prod_data[2], units), prod_data[1], units]
+                # out_line = f'{prod_data[1]},{calc_gross_revenue(prod_data[2], units)},{units}'
                 yield out_line
 
 
@@ -145,6 +146,30 @@ def open_file(directory, name):
     return open(f'{directory}/{name}', "w+")
 
 
+def partition(array, begin, end):
+    pivot_idx = begin
+    for i in xrange(begin + 1, end + 1):
+        if array[i] <= array[begin]:
+            pivot_idx += 1
+            array[i], array[pivot_idx] = array[pivot_idx], array[i]
+    array[pivot_idx], array[begin] = array[begin], array[pivot_idx]
+    return pivot_idx
+
+
+def quick_sort_recursion(array, begin, end):
+    if begin >= end:
+        return
+    pivot_idx = partition(array, begin, end)
+    quick_sort_recursion(array, begin, pivot_idx - 1)
+    quick_sort_recursion(array, pivot_idx + 1, end)
+
+
+def quick_sort(array, begin=0, end=None):
+    print(array)
+    if end is None:
+        end = len(array) - 1
+
+    return quick_sort_recursion(array, begin, end)
 
 
 if __name__ == '__main__':
@@ -168,7 +193,7 @@ if __name__ == '__main__':
     FILE_HEADER = 'Name,GrossRevenue,TotalUnits\n'
 
     try:
-        OUT_LINE = process_files(P_FILE, S_FILE)  # MATCHED & PROCESSED PRODUCT LINE
+        OUT_LINE = list(process_files(P_FILE, S_FILE))  # MATCHED & PROCESSED PRODUCT LIST
         REPORT_FILE = open_file(CURRENT_DIR, OUT_FILE)  # CREATE REPORT FILE
         REPORT_FILE.write(FILE_HEADER)  # APPLY FILE HEADER
         for line in OUT_LINE:
