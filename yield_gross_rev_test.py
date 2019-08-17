@@ -19,17 +19,35 @@ import logging
 from decimal import Decimal
 import unittest
 
-from . import yield_gross_rev
+from . import yield_gross_rev as ygr
 
 PRODUCT_FILE = os.getcwd() + '/files/product_file.txt'
 SALES_FILE = os.getcwd() + '/files/sales_file.txt'
 
-YEILD_EXPECTED = """Name,GrossRevenue,TotalUnits
+PRODUCT_EXPECTED = """
+1,Minor Widget,0.25,250
+2,Critical Widget,5.00,10
+3,Complete System (Basic),500,1
+4,Complete System (Deluxe),625,1
+"""
+
+SALES_EXPECTED = """
+1,1,2,10
+2,1,1,1
+3,2,1,5
+4,3,4,1
+5,3,5,2
+"""
+
+YIELD_EXPECTED = """
+Name,GrossRevenue,TotalUnits
 Minor Widget,625.00,2500
 Critical Widget,50.00,10
 Complete System (Basic),2500,5
 Complete System (Deluxe),625,1
 """
+
+
 
 class TestbigramParse(unittest.TestCase):
     """
@@ -40,7 +58,7 @@ class TestbigramParse(unittest.TestCase):
         """
         test that the input is a str
         """
-        self.assertIsInstance('', str)
+        self.assertIsInstance(ygr., str)
 
     def test_is_dict(self):
         """
@@ -50,38 +68,21 @@ class TestbigramParse(unittest.TestCase):
 
     def test_is_list(self):
         """
-        test that the input is a dict
+        test that the input is a list
         """
         self.assertIsInstance('', list)
 
     def test_expected_output(self):
         """
-        test to see if the nltk returned object is the same as our expect ouput from the sample
+        test to see if the returned object is the same as our expect output
         """
         self.assertEqual('', '')
 
     def test_len_input(self):
         """
-        test that the number of words + 1
-        that we find are equal to the number of bigrams
+        test that the number + 1
         """
         self.assertEqual('', '')
-
-    # def test_sum_bigrams(self):
-    #     """
-    #     test that the total count of bigrams found equals the total count of frequencies
-    #     this should fail as we know there are LTR marks \u200e
-    #     """
-    #     self.assertEqual('', '')
-
-    # def approach_delta(self):
-    #     """
-    #     compare the ouput of the nltk and non-nltk appraoches for funnzies and behavior notes
-    #     """
-    #     self.assert(nltk, non - nltk, msg=None)
-    #
-    #     # OR
-    #     # assertDictEqual(expected, actual, msg=None)
 
     def test_reading_of_data_from_file(self):
         """

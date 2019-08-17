@@ -14,6 +14,29 @@ Process...
 ### Testing under construction ###
 """
 
+import os
+import re
+import sys
+import logging
+from decimal import Decimal
+
+
+def read_file(file_path):
+    """
+    Load a file
+    Loop through process_lines generator
+    :param file_path:
+    :return:
+    Yield the output line to be processed
+    """
+    try:
+        with open(file_path) as file:
+            for out_line in process_lines(file):
+                # processed line from file >
+                yield out_line
+    except (IOError, OSError):
+        print("Error opening file")
+
 
 def process_lines(file_object):
     """
@@ -37,23 +60,6 @@ def process_lines(file_object):
             break
 
 
-def read_file(file_path):
-    """
-    Load a file
-    Loop through process_lines generator
-    :param file_path:
-    :return:
-    Yield the output line to be processed
-    """
-    try:
-        with open(file_path) as file:
-            for out_line in process_lines(file):
-                # processed line from file >
-                yield out_line
-    except (IOError, OSError):
-        print("Error opening file")
-
-
 def convert_line(raw_line):
     """
     Split up the string on "next line" char and select the first index
@@ -69,7 +75,7 @@ def convert_line(raw_line):
 
     out_list = raw_line.split('\n')[0].split(',')  # Change file str into list
     counter = 0
-    for index in out_list[counter:]:
+    for index in out_list:
         if re.search('[a-zA-Z]', index):
             pass
         elif '.' in index:
@@ -86,6 +92,7 @@ def process_files(products, sales):
     Step them both through calculation
     :param products:
     :param sales:
+
     :return:
     """
 
@@ -102,6 +109,7 @@ def calc_total_units(quantity, lot_size):
      TotalUnits = Quantity * LotSize
     :param quantity:
     :param lot_size:
+
     :return:
     TotalUnits
     """
@@ -128,6 +136,7 @@ def open_file(directory, name):
     w+ : create the file if it does not exist with a unique file name
     :param directory:
     :param name:
+
     :return:
     File Object
     """
@@ -136,27 +145,13 @@ def open_file(directory, name):
 
 if __name__ == '__main__':
 
-    import os
-    import re
-    import sys
-    import logging
-    from decimal import Decimal
-
     # Create the Logger
     LOGGER = logging.getLogger(__name__)
     LOGGER.setLevel(logging.WARNING)
-
-    # Create the Handler for logging data to a file
-    LOG_HANDLER = logging.FileHandler('logs/gross_rev_log.log')
+    LOG_HANDLER = logging.FileHandler('gross_rev_log.log')
     LOG_HANDLER.setLevel(logging.WARNING)
-
-    # Create a Formatter for formatting the log messages
     LOG_FORMATTER = logging.Formatter('%(asctime)s : %(name)s - %(levelname)s - %(message)s')
-
-    # Add the Formatter to the Handler
     LOG_HANDLER.setFormatter(LOG_FORMATTER)
-
-    # Add the Handler to the Logger
     LOGGER.addHandler(LOG_HANDLER)
     LOGGER.info('Completed configuring logger()!')
 
@@ -167,9 +162,6 @@ if __name__ == '__main__':
         P_FILE, S_FILE, OUT_FILE = sys.argv[1], sys.argv[2], sys.argv[3]
     else:
         sys.exit('There was an error in the length of your arguments')
-
-
-
     try:
         OUT_LINE = process_files(P_FILE, S_FILE)
         REPORT_FILE = open_file(CURRENT_DIR, OUT_FILE)
