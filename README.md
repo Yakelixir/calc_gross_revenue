@@ -14,10 +14,6 @@ If this shows a 2.x version then please run...
 python3 --version
 ```
 
-I have decided not to integrate asycnio or concurrent futures.
-This in the essence of time and not knowing the demands of the application or its resources
-
-
 Notes:
 1. The following args are in a specific order that is not flexible currently
 2. There are no installs needed or requirements as everything should come with a base python3 install
@@ -27,4 +23,11 @@ Notes:
 
 ```sh
 python yield_gross_rev.py <Product_File_Path> <Sales_File_Path> <Report_File_Name>
+```
+
+### Test Usage
+Prepared files included to run this
+
+```sh
+python yield_gross_rev.py $PWD/files/product_file.txt $PWD/files/sales_file.txt report_file.txt
 ```
